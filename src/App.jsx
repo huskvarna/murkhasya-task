@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { NewTaskForm } from "./NewTaskForm";
 
 export default function App() {
@@ -7,37 +7,13 @@ export default function App() {
   //Add 0 in front of the current minute if it's length is smaller than 2
   //To have the same format as local-datetime's minute used in reminder's input
   function getRealMinute(minute) {
-    if (minute.length < 2) {
+    if (minute.toString().length < 2 && minute.toString() !== "0") {
       return "0" + minute;
     } else {
       return minute;
     }
   }
-
-  //TODO: check the year and month.
-  //Function to handle reminders, checks if the year and month and minute
-  //of a task are the same as the local time
-  //When it's the same minute, it sends an reminder alert
-  //Function triggers once every minute
-  function handleReminders() {
-    setInterval(() => {
-      console.log("check started");
-      tasks.forEach((task) => {
-        const now = new Date();
-        //Checking the year
-        const reminderMinute = task.reminder.toString().slice(-2);
-        const nowMinute = now.getMinutes();
-        console.log(nowMinute);
-        console.log(reminderMinute);
-        if (getRealMinute(nowMinute).toString() == reminderMinute) {
-          alert("Reminder for task " + task.title);
-        }
-      });
-    }, 60000); // 60000 milliseconds = 1 minute
-  }
-
-  handleReminders();
-
+  console.log(tasks);
   //Function to add tasks upon submitting
   //Transfered to NewTaskForm for use there
   function addTask(title, reminder) {
@@ -68,7 +44,7 @@ export default function App() {
 
   function deleteTask(id) {
     setTasks((currentTasks) => {
-      return currentTasks.filter((todo) => todo.id !== id);
+      return currentTasks.filter((task) => task.id !== id);
     });
   }
 
@@ -97,7 +73,7 @@ export default function App() {
                 Delete
               </button>
               <p className="reminder-text">
-                Reminder at: {task.reminder.replace("T", " ")}
+                Reminder at: {task.reminder.toString()}{" "}
               </p>
             </li>
           );
