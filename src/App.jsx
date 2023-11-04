@@ -3,31 +3,51 @@ import { NewTaskForm } from "./NewTaskForm";
 
 export default function App() {
   const [tasks, setTasks] = useState([]);
+  const [timerDictionary, setTimerDictionary] = useState({});
 
-  //Add 0 in front of the current minute if it's length is smaller than 2
-  //To have the same format as local-datetime's minute used in reminder's input
-  function getRealMinute(minute) {
-    if (minute.toString().length < 2 && minute.toString() !== "0") {
-      return "0" + minute;
-    } else {
-      return minute;
-    }
-  }
-  console.log(tasks);
+  // Function to add an item to the dictionary
+  const addToDictionary = (key, value) => {
+    setTimerDictionary((prevDictionary) => ({
+      ...prevDictionary,
+      [key]: value,
+    }));
+  };
+
+  // Function to remove an item from the dictionary
+  const removeFromDictionary = (key) => {
+    const { [key]: removedItem, ...restOfDictionary } = timerDictionary;
+    setTimerDictionary(restOfDictionary);
+  };
+
   //Function to add tasks upon submitting
   //Transfered to NewTaskForm for use there
   function addTask(title, reminder) {
+    const generatedId = crypto.randomUUID();
     setTasks((currentTasks) => {
       return [
         ...currentTasks,
         {
-          id: crypto.randomUUID(),
+          id: generatedId,
           title,
           reminder,
           completed: false,
         },
       ];
     });
+    const currentTime = new Date();
+    const currentTimedOutTask = title;
+
+    if (reminder <= currentTime) {
+    } else {
+      const timeDifference = reminder - currentTime;
+
+      const timerId = setTimeout(() => {
+        alert("reminder for " + currentTimedOutTask);
+
+        removeFromDictionary(generatedId);
+      }, timeDifference);
+      addToDictionary(generatedId, timerId);
+    }
   }
 
   //If task gets checked then mark it as completed
@@ -42,7 +62,10 @@ export default function App() {
     });
   }
 
+  //Deletes the task and clears the reminder timeout
   function deleteTask(id) {
+    clearTimeout(timerDictionary[id]);
+    removeFromDictionary(id);
     setTasks((currentTasks) => {
       return currentTasks.filter((task) => task.id !== id);
     });

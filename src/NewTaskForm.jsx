@@ -10,16 +10,7 @@ export function NewTaskForm({ onSubmit }) {
     e.preventDefault();
 
     onSubmit(newTaskTitle, newTaskReminder);
-    const currentTime = new Date();
-    const currentTimedOutTask = newTaskTitle;
-    console.log(currentTimedOutTask);
-    if (newTaskReminder <= currentTime) {
-    } else {
-      const timeDifference = newTaskReminder - currentTime;
-      setTimeout(() => {
-        alert("Reminder for task " + currentTimedOutTask);
-      }, timeDifference);
-    }
+
     setNewTaskTitle("");
     setNewTaskReminder("");
   }
