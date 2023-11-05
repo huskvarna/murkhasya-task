@@ -14,9 +14,15 @@ export default function App() {
   };
 
   const handleSave = (index) => {
+    clearTimeout(timerDictionary[tasks[index].id]);
     const updatedTasks = [...tasks];
     updatedTasks[index].title = editedTask;
     setTasks(updatedTasks);
+    addReminder(
+      updatedTasks[index].title,
+      updatedTasks[index].reminder,
+      updatedTasks[index].id
+    );
     setEditingIndex(null);
   };
 
@@ -64,6 +70,29 @@ export default function App() {
       }, timeDifference);
       addToDictionary(generatedId, timerId);
     }
+  }
+
+  function addReminder(title, reminder, generatedId) {
+    const currentTime = new Date();
+    const currentTimedOutTask = title;
+
+    if (reminder <= currentTime) {
+      alert("Reminder set too early.");
+    } else {
+      const timeDifference = reminder - currentTime;
+
+      const timerId = setTimeout(() => {
+        alert("Reminder for " + currentTimedOutTask);
+
+        removeFromDictionary(generatedId);
+      }, timeDifference);
+      addToDictionary(generatedId, timerId);
+    }
+  }
+
+  function getTaskTitle(taskId) {
+    const task = tasks.find((task) => task.id === taskId);
+    return task ? task.title : null;
   }
 
   //If task gets checked then mark it as completed
