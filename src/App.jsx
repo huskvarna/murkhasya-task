@@ -62,21 +62,28 @@ export default function App() {
   };
 
   //Handles editing of a task title
-  const handleEdit = (index) => {
-    setEditingIndex(index);
-    setEditedTask(tasks[index].title);
+  const handleEdit = (taskId) => {
+    setEditingIndex(taskId);
+    setEditedTask(tasks.find((task) => task.id === taskId).title);
   };
 
   //Handles saving a new edited task title, clears old timeout and creates a new one for the new title
-  const handleSave = (index) => {
-    clearTimeout(timerDictionary[tasks[index].id]);
-    const updatedTasks = [...tasks];
-    updatedTasks[index].title = editedTask;
+  const handleSave = (taskId) => {
+    clearTimeout(timerDictionary[taskId]);
+    const updatedTasks = tasks.map((task) => {
+      if (task.id === taskId) {
+        return {
+          ...task,
+          title: editedTask,
+        };
+      }
+      return task;
+    });
     setTasks(updatedTasks);
     addReminder(
-      updatedTasks[index].title,
-      updatedTasks[index].reminder,
-      updatedTasks[index].id
+      updatedTasks.find((task) => task.id === taskId).title,
+      updatedTasks.find((task) => task.id === taskId).reminder,
+      taskId
     );
     setEditingIndex(null);
   };
@@ -175,9 +182,9 @@ export default function App() {
               Nothing in tasks. Enjoy your empty tasklist.
             </label>
           )}
-          {tasks.map((task, index) => {
+          {tasks.map((task) => {
             return (
-              <li className="list-group-item" key={index}>
+              <li className="list-group-item" key={task.id}>
                 <label>
                   {
                     <input
@@ -188,7 +195,7 @@ export default function App() {
                     />
                   }
                 </label>
-                {editingIndex === index ? (
+                {editingIndex === task.id ? (
                   <label>
                     <input
                       className="input"
@@ -198,7 +205,7 @@ export default function App() {
                     />
                     <button
                       className="btn btn-success"
-                      onClick={() => handleSave(index)}
+                      onClick={() => handleSave(task.id)}
                     >
                       Save
                     </button>
@@ -208,7 +215,7 @@ export default function App() {
                     {task.title}
                     <button
                       className="btn btn-secondary"
-                      onClick={() => handleEdit(index)}
+                      onClick={() => handleEdit(task.id)}
                     >
                       Edit
                     </button>
