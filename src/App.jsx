@@ -5,6 +5,21 @@ export default function App() {
   const [tasks, setTasks] = useState([]);
   const [timerDictionary, setTimerDictionary] = useState({});
 
+  const [editingIndex, setEditingIndex] = useState(null);
+  const [editedTask, setEditedTask] = useState("");
+
+  const handleEdit = (index) => {
+    setEditingIndex(index);
+    setEditedTask(tasks[index].title);
+  };
+
+  const handleSave = (index) => {
+    const updatedTasks = [...tasks];
+    updatedTasks[index].title = editedTask;
+    setTasks(updatedTasks);
+    setEditingIndex(null);
+  };
+
   // Function to add an item to the dictionary
   const addToDictionary = (key, value) => {
     setTimerDictionary((prevDictionary) => ({
@@ -38,11 +53,12 @@ export default function App() {
     const currentTimedOutTask = title;
 
     if (reminder <= currentTime) {
+      alert("Reminder set too early.");
     } else {
       const timeDifference = reminder - currentTime;
 
       const timerId = setTimeout(() => {
-        alert("reminder for " + currentTimedOutTask);
+        alert("Reminder for " + currentTimedOutTask);
 
         removeFromDictionary(generatedId);
       }, timeDifference);
@@ -77,18 +93,32 @@ export default function App() {
       <NewTaskForm onSubmit={addTask} />
       <ul className="list">
         {tasks.length === 0 && "Nothing in tasks. Enjoy your empty tasklist."}
-        {tasks.map((task) => {
+        {tasks.map((task, index) => {
           return (
-            <li key={task.id}>
+            <li key={index}>
               <label>
-                {task.title}
                 <input
                   type="checkbox"
                   checked={task.completed}
                   onChange={(e) => checkTask(task.id, e.target.checked)}
                 />
               </label>
-              <button className="btn-edit">Edit</button>
+              {editingIndex === index ? (
+                <label>
+                  <input
+                    type="text"
+                    value={editedTask}
+                    onChange={(e) => setEditedTask(e.target.value)}
+                  />
+                  <button onClick={() => handleSave(index)}>Save</button>
+                </label>
+              ) : (
+                <label>
+                  {task.title}
+                  <button onClick={() => handleEdit(index)}>Edit</button>
+                </label>
+              )}
+
               <button
                 onClick={() => deleteTask(task.id)}
                 className="btn-delete"
