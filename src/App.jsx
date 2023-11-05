@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useState } from "react";
 import { NewTaskForm } from "./NewTaskForm";
 
 export default function App() {
@@ -55,21 +55,7 @@ export default function App() {
         },
       ];
     });
-    const currentTime = new Date();
-    const currentTimedOutTask = title;
-
-    if (reminder <= currentTime) {
-      alert("Reminder set too early.");
-    } else {
-      const timeDifference = reminder - currentTime;
-
-      const timerId = setTimeout(() => {
-        alert("Reminder for " + currentTimedOutTask);
-
-        removeFromDictionary(generatedId);
-      }, timeDifference);
-      addToDictionary(generatedId, timerId);
-    }
+    addReminder(title, reminder, generatedId);
   }
 
   function addReminder(title, reminder, generatedId) {
