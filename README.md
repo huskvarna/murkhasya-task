@@ -1,11 +1,35 @@
-# React + Vite
+# Guide to start the app
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+### Go to the project folder
 
-Currently, two official plugins are available:
+### Run: ``` npm i ```
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### Run ``` npm run dev ```
 
+### Go to http://localhost:5173/ or whatever port is shown
 
-npm install react-datepicker
+# Application description
+
+## New Task
+Write a task in new task to add to your tasklist.
+
+## Set a Reminder
+Set a reminder to any date or time in the future to get a notification at exactly that time. The timezone used is your local time.
+
+## Add button
+Submits the task to the list
+
+## Delete all completed button
+Removes all completed tasks from the task list
+
+## Completion checkbox
+Mark the task as completed. The reminder will still trigger if you haven't removed it
+
+## Edit/Save button
+Use to edit the task title
+
+## Delete button
+Use to delete the task
+
+## Edit Reminder/Update button
+Use to edit the reminder time of your task
