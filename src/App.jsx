@@ -1,12 +1,43 @@
 import { useState } from "react";
 import { NewTaskForm } from "./NewTaskForm";
 
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+
 export default function App() {
   const [tasks, setTasks] = useState([]);
   const [timerDictionary, setTimerDictionary] = useState({});
 
   const [editingIndex, setEditingIndex] = useState(null);
   const [editedTask, setEditedTask] = useState("");
+
+  const [editingTaskId, setEditingTaskId] = useState(null);
+  const [editedReminder, setEditedReminder] = useState(null);
+
+  const handleEditReminder = (taskId) => {
+    setEditingTaskId(taskId);
+    setEditedReminder(tasks.find((task) => task.id === taskId).reminder);
+  };
+
+  const handleUpdateReminder = (taskId) => {
+    clearTimeout(taskId);
+    const updatedTasks = tasks.map((task) => {
+      if (task.id === taskId) {
+        return {
+          ...task,
+          reminder: editedReminder,
+        };
+      }
+      return task;
+    });
+    setTasks(updatedTasks);
+    addReminder(
+      updatedTasks.find((task) => task.id === taskId).title,
+      updatedTasks.find((task) => task.id === taskId).reminder,
+      taskId
+    );
+    setEditingTaskId(null);
+  };
 
   const handleEdit = (index) => {
     setEditingIndex(index);
@@ -140,9 +171,33 @@ export default function App() {
               >
                 Delete
               </button>
-              <p className="reminder-text">
-                Reminder at: {task.reminder.toString()}{" "}
-              </p>
+              {task.id === editingTaskId ? (
+                <div>
+                  <DatePicker
+                    selected={editedReminder}
+                    onChange={(date) => setEditedReminder(date)}
+                    showTimeSelect
+                    timeFormat="HH:mm"
+                    timeIntervals={15}
+                    timeCaption="Time"
+                    dateFormat="MMMM d, yyyy h:mm aa"
+                  />
+                  <button onClick={() => handleUpdateReminder(task.id)}>
+                    Update
+                  </button>
+                </div>
+              ) : (
+                <div>
+                  {task.reminder ? (
+                    <span>{task.reminder.toString()}</span>
+                  ) : (
+                    <span>No reminder set</span>
+                  )}
+                  <button onClick={() => handleEditReminder(task.id)}>
+                    Edit Reminder
+                  </button>
+                </div>
+              )}
             </li>
           );
         })}
