@@ -107,11 +107,6 @@ export default function App() {
     }
   }
 
-  function getTaskTitle(taskId) {
-    const task = tasks.find((task) => task.id === taskId);
-    return task ? task.title : null;
-  }
-
   //If task gets checked then mark it as completed
   function checkTask(id, completed) {
     setTasks((currentTasks) => {
