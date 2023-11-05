@@ -19,7 +19,9 @@ export function NewTaskForm({ onSubmit }) {
   return (
     <form onSubmit={handleSubmit} className="new-task-form">
       <div className="task-adder">
-        <label htmlFor="task">New Task </label>
+        <label htmlFor="task" className="text-margin">
+          New Task{" "}
+        </label>
         <input
           className="input-text"
           value={newTaskTitle}
@@ -29,7 +31,7 @@ export function NewTaskForm({ onSubmit }) {
         />
       </div>
       <div className="reminder-adder">
-        <label>Set a Reminder </label>
+        <label className="text-margin">Set a Reminder </label>
         <DatePicker
           className="input-text"
           selected={newTaskReminder}
@@ -41,7 +43,7 @@ export function NewTaskForm({ onSubmit }) {
           dateFormat="MMMM d, yyyy h:mm aa"
         />
       </div>
-      <button>Add</button>
+      <button className="btn-deleteall">Add</button>
     </form>
   );
 }

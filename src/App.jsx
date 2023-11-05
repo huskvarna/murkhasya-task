@@ -25,8 +25,8 @@ export default function App() {
     setEditedReminder(tasks.find((task) => task.id === taskId).reminder);
   };
 
-  //Handles the updating of a reminder
-  const handleUpdateReminder = (taskId) => {
+  //Handles the saving of a edited reminder
+  const handleSaveReminder = (taskId) => {
     clearTimeout(timerDictionary[taskId]);
     const updatedTasks = tasks.map((task) => {
       if (task.id === taskId) {
@@ -66,7 +66,7 @@ export default function App() {
     setEditingIndex(null);
   };
 
-  // Function to add an item to the dictionary
+  //Function to add an item to the dictionary
   const addToDictionary = (key, value) => {
     setTimerDictionary((prevDictionary) => ({
       ...prevDictionary,
@@ -74,14 +74,13 @@ export default function App() {
     }));
   };
 
-  // Function to remove an item from the dictionary
+  //Function to remove an item from the dictionary
   const removeFromDictionary = (key) => {
     const { [key]: removedItem, ...restOfDictionary } = timerDictionary;
     setTimerDictionary(restOfDictionary);
   };
 
   //Function to add tasks upon submitting
-  //Transfered to NewTaskForm for use there
   function addTask(title, reminder) {
     const generatedId = crypto.randomUUID();
     setTasks((currentTasks) => {
@@ -156,7 +155,11 @@ export default function App() {
           Delete all completed
         </button>
         <ul className="list-group">
-          {tasks.length === 0 && "Nothing in tasks. Enjoy your empty tasklist."}
+          {tasks.length === 0 && (
+            <label className="text-margin">
+              Nothing in tasks. Enjoy your empty tasklist.
+            </label>
+          )}
           {tasks.map((task, index) => {
             return (
               <li className="list-group-item" key={index}>
@@ -215,7 +218,7 @@ export default function App() {
                       dateFormat="MMMM d, yyyy h:mm aa"
                     />
                     <button
-                      onClick={() => handleUpdateReminder(task.id)}
+                      onClick={() => handleSaveReminder(task.id)}
                       className="btn-reminder"
                     >
                       Update

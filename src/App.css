@@ -4,6 +4,7 @@
     background-repeat: no-repeat;
     height: 100vh;
     
+    
   } 
 
   .btn {
@@ -25,4 +26,11 @@
   }
   .btn-deleteall{
     margin-bottom: 5px;
+    margin-left: 3px;
+  }
+  .text-margin{
+    margin-left: 3px;
+  }
+  .header {
+    margin-left: 3px;
   }
