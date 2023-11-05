@@ -27,7 +27,7 @@ export default function App() {
   const [timerDictionary, setTimerDictionary] = useState({});
 
   //Hooks for editing the task's title
-  const [editingIndex, setEditingIndex] = useState(null);
+  const [editingId, setEditingId] = useState(null);
   const [editedTask, setEditedTask] = useState("");
 
   //Hooks for editing the reminder time
@@ -63,7 +63,7 @@ export default function App() {
 
   //Handles editing of a task title
   const handleEdit = (taskId) => {
-    setEditingIndex(taskId);
+    setEditingId(taskId);
     setEditedTask(tasks.find((task) => task.id === taskId).title);
   };
 
@@ -85,7 +85,7 @@ export default function App() {
       updatedTasks.find((task) => task.id === taskId).reminder,
       taskId
     );
-    setEditingIndex(null);
+    setEditingId(null);
   };
 
   //Function to add an item to the dictionary
@@ -195,7 +195,7 @@ export default function App() {
                     />
                   }
                 </label>
-                {editingIndex === task.id ? (
+                {editingId === task.id ? (
                   <label>
                     <input
                       className="input"
