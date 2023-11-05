@@ -1,6 +1,7 @@
 import { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import "./App.css";
 
 export function NewTaskForm({ onSubmit }) {
   const [newTaskTitle, setNewTaskTitle] = useState("");
@@ -20,6 +21,7 @@ export function NewTaskForm({ onSubmit }) {
       <div className="task-adder">
         <label htmlFor="task">New Task </label>
         <input
+          className="input-text"
           value={newTaskTitle}
           onChange={(e) => setNewTaskTitle(e.target.value)}
           type="text"
@@ -29,16 +31,17 @@ export function NewTaskForm({ onSubmit }) {
       <div className="reminder-adder">
         <label>Set a Reminder </label>
         <DatePicker
+          className="input-text"
           selected={newTaskReminder}
           onChange={(date) => setNewTaskReminder(date)}
           showTimeSelect
           timeFormat="HH:mm"
-          timeIntervals={15}
+          timeIntervals={5}
           timeCaption="Time"
           dateFormat="MMMM d, yyyy h:mm aa"
         />
       </div>
-      <button className="btn">Add</button>
+      <button>Add</button>
     </form>
   );
 }

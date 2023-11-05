@@ -3,6 +3,7 @@ import { NewTaskForm } from "./NewTaskForm";
 
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import "./App.css";
 
 export default function App() {
   const [tasks, setTasks] = useState([]);
@@ -20,7 +21,7 @@ export default function App() {
   };
 
   const handleUpdateReminder = (taskId) => {
-    clearTimeout(taskId);
+    clearTimeout(timerDictionary[taskId]);
     const updatedTasks = tasks.map((task) => {
       if (task.id === taskId) {
         return {
@@ -92,9 +93,9 @@ export default function App() {
   function addReminder(title, reminder, generatedId) {
     const currentTime = new Date();
     const currentTimedOutTask = title;
-
-    if (reminder <= currentTime) {
-      alert("Reminder set too early.");
+    if (reminder == "") {
+    } else if (reminder <= currentTime) {
+      alert("Reminder set before current time. No reminder will be set.");
     } else {
       const timeDifference = reminder - currentTime;
 
@@ -128,75 +129,110 @@ export default function App() {
     });
   }
 
+  //Checks all tasks, if any of them is completed deletes it
+  function deleteCompleted() {
+    tasks.forEach((task) => {
+      if (task.completed === true) {
+        deleteTask(task.id);
+      }
+    });
+  }
+
   return (
     <>
-      <h1 className="header">ToDo List</h1>
-      <NewTaskForm onSubmit={addTask} />
-      <ul className="list">
-        {tasks.length === 0 && "Nothing in tasks. Enjoy your empty tasklist."}
-        {tasks.map((task, index) => {
-          return (
-            <li key={index}>
-              <label>
-                <input
-                  type="checkbox"
-                  checked={task.completed}
-                  onChange={(e) => checkTask(task.id, e.target.checked)}
-                />
-              </label>
-              {editingIndex === index ? (
+      <div className="bg">
+        <h1 className="header">ToDo List</h1>
+        <NewTaskForm onSubmit={addTask}></NewTaskForm>
+        <button onClick={() => deleteCompleted()} className="btn-deleteall">
+          Delete all completed
+        </button>
+        <ul className="list-group">
+          {tasks.length === 0 && "Nothing in tasks. Enjoy your empty tasklist."}
+          {tasks.map((task, index) => {
+            return (
+              <li className="list-group-item" key={index}>
                 <label>
-                  <input
-                    type="text"
-                    value={editedTask}
-                    onChange={(e) => setEditedTask(e.target.value)}
-                  />
-                  <button onClick={() => handleSave(index)}>Save</button>
+                  {
+                    <input
+                      className="input"
+                      type="checkbox"
+                      checked={task.completed}
+                      onChange={(e) => checkTask(task.id, e.target.checked)}
+                    />
+                  }
                 </label>
-              ) : (
-                <label>
-                  {task.title}
-                  <button onClick={() => handleEdit(index)}>Edit</button>
-                </label>
-              )}
+                {editingIndex === index ? (
+                  <label>
+                    <input
+                      className="input"
+                      type="text"
+                      value={editedTask}
+                      onChange={(e) => setEditedTask(e.target.value)}
+                    />
+                    <button
+                      className="btn btn-success"
+                      onClick={() => handleSave(index)}
+                    >
+                      Save
+                    </button>
+                  </label>
+                ) : (
+                  <b>
+                    {task.title}
+                    <button
+                      className="btn btn-secondary"
+                      onClick={() => handleEdit(index)}
+                    >
+                      Edit
+                    </button>
+                  </b>
+                )}
 
-              <button
-                onClick={() => deleteTask(task.id)}
-                className="btn-delete"
-              >
-                Delete
-              </button>
-              {task.id === editingTaskId ? (
-                <div>
-                  <DatePicker
-                    selected={editedReminder}
-                    onChange={(date) => setEditedReminder(date)}
-                    showTimeSelect
-                    timeFormat="HH:mm"
-                    timeIntervals={15}
-                    timeCaption="Time"
-                    dateFormat="MMMM d, yyyy h:mm aa"
-                  />
-                  <button onClick={() => handleUpdateReminder(task.id)}>
-                    Update
-                  </button>
-                </div>
-              ) : (
-                <div>
-                  {task.reminder ? (
-                    <span>{task.reminder.toString()}</span>
-                  ) : (
-                    <span>No reminder set</span>
-                  )}
-                  <button onClick={() => handleEditReminder(task.id)}>
-                    Edit Reminder
-                  </button>
-                </div>
-              )}
-            </li>
-          );
-        })}
-      </ul>
+                <button
+                  onClick={() => deleteTask(task.id)}
+                  className="btn btn-danger"
+                >
+                  Delete
+                </button>
+                {task.id === editingTaskId ? (
+                  <div>
+                    <DatePicker
+                      selected={editedReminder}
+                      onChange={(date) => setEditedReminder(date)}
+                      showTimeSelect
+                      timeFormat="HH:mm"
+                      timeIntervals={15}
+                      timeCaption="Time"
+                      dateFormat="MMMM d, yyyy h:mm aa"
+                    />
+                    <button
+                      onClick={() => handleUpdateReminder(task.id)}
+                      className="btn-reminder"
+                    >
+                      Update
+                    </button>
+                  </div>
+                ) : (
+                  <div>
+                    <label className="reminder-desc">Reminder at: </label>
+                    {task.reminder ? (
+                      <span>{task.reminder.toString()}</span>
+                    ) : (
+                      <span>No reminder set</span>
+                    )}
+                    <button
+                      onClick={() => handleEditReminder(task.id)}
+                      className="btn-reminder"
+                    >
+                      Edit Reminder
+                    </button>
+                  </div>
+                )}
+              </li>
+            );
+          })}
+        </ul>
+      </div>
     </>
   );
 }
