@@ -7,19 +7,25 @@ import "./App.css";
 
 export default function App() {
   const [tasks, setTasks] = useState([]);
+
+  //Dictionary to store the timeouts of different tasks in, in order to clear them when necessary
   const [timerDictionary, setTimerDictionary] = useState({});
 
+  //Hooks for editing the task's title
   const [editingIndex, setEditingIndex] = useState(null);
   const [editedTask, setEditedTask] = useState("");
 
+  //Hooks for editing the reminder time
   const [editingTaskId, setEditingTaskId] = useState(null);
   const [editedReminder, setEditedReminder] = useState(null);
 
+  //Handles the editing of a reminder
   const handleEditReminder = (taskId) => {
     setEditingTaskId(taskId);
     setEditedReminder(tasks.find((task) => task.id === taskId).reminder);
   };
 
+  //Handles the updating of a reminder
   const handleUpdateReminder = (taskId) => {
     clearTimeout(timerDictionary[taskId]);
     const updatedTasks = tasks.map((task) => {
@@ -40,11 +46,13 @@ export default function App() {
     setEditingTaskId(null);
   };
 
+  //Handles editing of a task title
   const handleEdit = (index) => {
     setEditingIndex(index);
     setEditedTask(tasks[index].title);
   };
 
+  //Handles saving a new edited task title, clears old timeout and creates a new one for the new title
   const handleSave = (index) => {
     clearTimeout(timerDictionary[tasks[index].id]);
     const updatedTasks = [...tasks];
