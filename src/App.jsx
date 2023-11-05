@@ -118,7 +118,7 @@ export default function App() {
     const currentTimedOutTask = title;
     if (reminder == "") {
     } else if (reminder <= currentTime) {
-      alert("Reminder set before current time. No reminder will be set.");
+      alert("Reminder set before current time. The reminder will not trigger.");
     } else {
       const timeDifference = reminder - currentTime;
 
