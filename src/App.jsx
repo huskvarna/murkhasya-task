@@ -90,6 +90,7 @@ export default function App() {
     addReminder(title, reminder, generatedId);
   }
 
+  //Function to add a timeout for an alert
   function addReminder(title, reminder, generatedId) {
     const currentTime = new Date();
     const currentTimedOutTask = title;
@@ -201,7 +202,7 @@ export default function App() {
                       onChange={(date) => setEditedReminder(date)}
                       showTimeSelect
                       timeFormat="HH:mm"
-                      timeIntervals={15}
+                      timeIntervals={5}
                       timeCaption="Time"
                       dateFormat="MMMM d, yyyy h:mm aa"
                     />
