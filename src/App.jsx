@@ -1,27 +1,12 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { NewTaskForm } from "./NewTaskForm";
-import parseISO from "date-fns/parseISO";
 
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "./App.css";
 
 export default function App() {
-  const [tasks, setTasks] = useState(() => {
-    const localValue = localStorage.getItem("tasks");
-    if (localValue == null) return [];
-    const parsedTasks = JSON.parse(localValue).map((task) => ({
-      ...task,
-      reminder: parseISO(task.reminder), // Use parseISO to parse the date string
-    }));
-
-    return parsedTasks;
-  });
-
-  useEffect(() => {
-    // Save tasks to local storage whenever they change
-    localStorage.setItem("tasks", JSON.stringify(tasks));
-  }, [tasks]);
+  const [tasks, setTasks] = useState([]);
 
   //Dictionary to store the timeouts of different tasks in, in order to clear them when necessary
   const [timerDictionary, setTimerDictionary] = useState({});
