@@ -2,7 +2,7 @@
 
 ### Go to the project folder
 
-### Run: ``` npm i ```
+### Run ``` npm i ```
 
 ### Run ``` npm run dev ```
 
